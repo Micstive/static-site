@@ -1,3 +1,4 @@
+
 class HTMLNode():
     def __init__(self, tag = None, value = None, children = None, props = None):
         self.tag = tag
@@ -30,6 +31,7 @@ class LeafNode(HTMLNode):
         if self.tag is None:
             return self.value
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+    
     def __repr__(self):
         return f"HTMLNode(tag={self.tag}, value='{self.value}', props={self.props})"
  
@@ -37,16 +39,16 @@ class LeafNode(HTMLNode):
     
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props = None):
-        super().__init__(tag, children, props,  value = None)
+        super().__init__(tag, None, children, props)
     
     def to_html(self):
         if self.tag is None:
             raise ValueError("no tag found")
         if self.children is None:
             raise ValueError("children are missing")
-        child_html = ""
+        child_html = f""
         for child in self.children:
             child_html += child.to_html()
         
-        return f"<{self.tag}{self.props_to_html}>{child_html}</{self.tag}>"
+        return f"<{self.tag}{self.props_to_html()}>{child_html}</{self.tag}>"
         
