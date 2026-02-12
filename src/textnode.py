@@ -24,9 +24,9 @@ class TextNode():
         
     def __repr__(self):
         if self.url is not None:
-            return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+            return f"TextNode(\"{self.text}\", {self.text_type.value.upper()}, \"{self.url}\")"
         else:
-            return f"TextNode({self.text}, {self.text_type.value})"
+            return f"TextNode(\"{self.text}\", TextType.{self.text_type.value.upper()})"
 
 def text_node_to_html_node(text_node):
     if text_node.text_type == TextType.TEXT:

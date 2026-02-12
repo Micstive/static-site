@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from funcs import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+from funcs import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
 
 class TestFuncs(unittest.TestCase):
     def test_code(self):
@@ -242,6 +242,9 @@ class TestFuncs(unittest.TestCase):
             ],
             new_nodes,
         )
+        print("a")
+        for element in text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"):
+            print(element)
 
 
 if __name__ == "__main__":
