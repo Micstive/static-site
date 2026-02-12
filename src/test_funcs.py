@@ -242,9 +242,44 @@ class TestFuncs(unittest.TestCase):
             ],
             new_nodes,
         )
-        print("a")
-        for element in text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"):
-            print(element)
+
+    def test_text_to_textnode_no_text(self):
+        nodes = []
+        nodes = text_to_textnodes("")
+        self.assertListEqual([TextNode("", TextType.TEXT)], nodes)
+
+    def test_text_to_textnode_every_type(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        nodes = text_to_textnodes(text)
+        self.assertListEqual([
+            TextNode("This is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.TEXT),
+            TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://boot.dev"),], 
+            nodes)
+        
+    def test_text_to_textnode_reordered(self):
+        text = "and and a `code block` an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) This  with  is **text**   and a [link](https://boot.dev) an _italic_ word"
+        nodes = text_to_textnodes(text)
+        self.assertListEqual([
+            TextNode("and and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" an ", TextType.TEXT),
+            TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" This  with  is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode("   and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://boot.dev"),
+            TextNode(" an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word", TextType.TEXT),], 
+            nodes)
 
 
 if __name__ == "__main__":
