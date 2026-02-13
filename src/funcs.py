@@ -87,4 +87,10 @@ def text_to_textnodes(text):
       #      for a in split_nodes_delimiter([piece], "`", TextType.CODE):
        #         textnodes.append(a)
     return textnodes
-        
+
+def markdown_to_blocks(markdown):
+    block_list = []
+    for block in markdown.split("\n\n"):
+        if re.findall(r".", block) is not None:
+            block_list.append(block.strip())
+    return block_list
