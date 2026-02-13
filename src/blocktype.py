@@ -11,19 +11,21 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered_list"
 
 def block_to_block_type(block):
-    if re.findall(r"^(\!){1,6} (.*?)") is not None:
+    if re.search(r"^(\!){1,6} (.*?)", block) is not None:
         return BlockType.HEADING
-    if re.findall(r"^`{3}\n(.*?)`{3}") is not None:
+    if re.search(r"^```\n[\s\S]*?```$", block) is not None:
         return BlockType.CODE
-    if re.findall(r"^>.*?>") is not None:
+    if re.search(r"^>.*?", block) is not None:
         return BlockType.QUOTE
-    if re.findall(r"^(- (.*?)\n)\1") is not None:
+    if re.search(r"^(- (.*?)\n)+", block) is not None:
         return BlockType.UNORDERED_LIST
-    if re.findall(r"^(\d+ (.*?)\n)+") is not None:
-        line_numbers = re.findall(r"^(\d+) .*?\n+")
+    if re.search(r"^(?:(\d+)\. .*?)+", block) is not None:
+        line_numbers = re.findall(r"(\d+)\. ", block)
         increments = True
         for i in range(0, len(line_numbers) - 1):
-            if line_numbers[i] >= line_numbers[i + 1]:
+            if int(line_numbers[i + 1]) - int(line_numbers[i]) == 1  and int(line_numbers[i]) == i + 1:
+                continue
+            else:
                 increments = False
                 break
         if increments == True:
